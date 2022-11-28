@@ -1,6 +1,6 @@
 name: Flutter CI
 
-on: push
+on: [push, pull_request]
   # push:
   #   branches: [ $default-branch ]
   # pull_request:
@@ -10,7 +10,7 @@ on: push
 #   contents: read
 
 jobs:
-  test:
+  test-coverage:
     runs-on: ubuntu-latest
     # timeout-minutes: 10
 
@@ -27,3 +27,11 @@ jobs:
           flutter pub run build_runner build
       - name: Test
         run: flutter test --coverage
+      - name: Show Coverage Report
+        uses: zgosalvez/github-actions-report-lcov@v1
+        with:
+          coverage-files: coverage/lcov.info
+          minimum-coverage: 0
+          artifact-name: code-coverage-report
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: ./
