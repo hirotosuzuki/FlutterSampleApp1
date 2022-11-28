@@ -1,6 +1,6 @@
 name: Flutter CI
 
-on: [push, pull_request]
+on: [pull_request]
   # push:
   #   branches: [ $default-branch ]
   # pull_request:
@@ -31,7 +31,7 @@ jobs:
         uses: zgosalvez/github-actions-report-lcov@v1
         with:
           coverage-files: coverage/lcov.info
-          minimum-coverage: 0
+          minimum-coverage: 50
           artifact-name: code-coverage-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: ./
