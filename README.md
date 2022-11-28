@@ -1,4 +1,5 @@
 # flutter_sample_app
+[![Flutter CI](https://github.com/hirotosuzuki/FlutterSampleApp1/actions/workflows/flutter-ci.yml/badge.svg)](https://github.com/hirotosuzuki/FlutterSampleApp1/actions/workflows/flutter-ci.yml)
 
 A new Flutter project.
 
