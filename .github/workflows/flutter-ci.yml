@@ -1,19 +1,48 @@
 name: Flutter CI
 
-on: [pull_request]
+on:
   # push:
   #   branches: [ $default-branch ]
-  # pull_request:
+  pull_request:
+    paths:
+      - lib/**
+      - test/**
+      - pubspec.yaml      
   #   branches: [ $default-branch ]
 
 # permissions:
 #   contents: read
 
-jobs:
-  test-coverage:
-    runs-on: ubuntu-latest
-    # timeout-minutes: 10
+# jobs:
+#   test-coverage:
+#     runs-on: ubuntu-latest
+#     # timeout-minutes: 10
 
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Setup Flutter
+#         uses: subosito/flutter-action@v2
+#         with:
+#           flutter-version: '3.3.8'
+#           channel: 'stable'
+#       - name: Install Flutter Packages
+#         run: |
+#           flutter pub get
+#           flutter pub run build_runner build
+#       - name: Test
+#         run: flutter test --coverage
+#       - name: Show Coverage Report
+#         uses: zgosalvez/github-actions-report-lcov@v1
+#         with:
+#           coverage-files: coverage/lcov.info
+#           minimum-coverage: 50
+#           artifact-name: code-coverage-report
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           working-directory: ./
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Setup Flutter
@@ -22,16 +51,24 @@ jobs:
           flutter-version: '3.3.8'
           channel: 'stable'
       - name: Install Flutter Packages
-        run: |
-          flutter pub get
-          flutter pub run build_runner build
+        run: flutter pub get
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run build_runner
+        run: flutter pub run build_runner build
+  test:
+    needs: [setup, build]
+    runs-on: ubuntu-latest
+    steps:
       - name: Test
         run: flutter test --coverage
       - name: Show Coverage Report
         uses: zgosalvez/github-actions-report-lcov@v1
         with:
           coverage-files: coverage/lcov.info
-          minimum-coverage: 50
+          minimum-coverage: 0
           artifact-name: code-coverage-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: ./
